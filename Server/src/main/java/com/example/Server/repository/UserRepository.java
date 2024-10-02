@@ -1,0 +1,13 @@
+package com.example.Server.repository;
+
+import com.example.Server.model.UserModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface UserRepository  extends JpaRepository<UserModel, Long> {
+    List<UserModel> findById(long id);
+    List<UserModel> deleteById(long id);
+}
