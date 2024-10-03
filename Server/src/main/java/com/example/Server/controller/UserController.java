@@ -2,14 +2,12 @@ package com.example.Server.controller;
 
 import com.example.Server.model.UserModel;
 import com.example.Server.service.UserService;
-import com.example.Server.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +19,11 @@ public class UserController {
     @GetMapping(value = "/")
     public String getPage() {
         return "Welcome";
+    }
+
+    @GetMapping(value = "/login")
+    public ResponseEntity<Object> login(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) throws NoSuchAlgorithmException {
+        return new ResponseEntity<>(userService.findByEmailAndPassword(email, password), HttpStatus.OK);
     }
 
     // Shouldn't authorize by only ID, change to JWT
@@ -54,6 +57,5 @@ public class UserController {
     ) throws NoSuchAlgorithmException {
       return new ResponseEntity<>(userService.saveUser(email, password, fName, lName, town, address, zipCode, phoneNumber), HttpStatus.CREATED);
     }
-
 
 }
