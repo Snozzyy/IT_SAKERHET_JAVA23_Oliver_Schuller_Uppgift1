@@ -2,6 +2,7 @@ package com.example.Server.controller;
 
 import com.example.Server.model.UserModel;
 import com.example.Server.service.UserService;
+import com.example.Server.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +26,19 @@ public class UserController {
     // Shouldn't authorize by only ID, change to JWT
     @GetMapping(value = "/my-details")
     public Optional<UserModel> getMyDetails(
-            @RequestParam(value = "id") long id
-    ) {
-        return userService.findById(id);
+            @RequestParam(value = "email") String email,
+            @RequestParam(value = "password") String password
+    ) throws NoSuchAlgorithmException {
+        return userService.findByEmailAndPassword(email, password);
     }
 
     // Optimal would be to not use ID like this to prevent IDOR attack
     @DeleteMapping(value = "/delete")
     public ResponseEntity<Object> deleteUser(
-            @RequestParam(value = "id") long id
-    ) {
-        return new ResponseEntity<>(userService.deleteById(id), HttpStatus.OK);
+            @RequestParam(value = "email") String email,
+            @RequestParam(value = "password") String password
+    ) throws NoSuchAlgorithmException {
+        return new ResponseEntity<>(userService.deleteByEmailAndPassword(email, password), HttpStatus.OK);
     }
 
     @PostMapping(value = "/register")

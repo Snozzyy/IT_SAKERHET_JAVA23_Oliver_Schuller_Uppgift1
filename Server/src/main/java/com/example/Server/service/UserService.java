@@ -17,12 +17,9 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public Optional<UserModel> findById(Long id){
-        return userRepository.findById(id);
-    }
-
-    public HashMap<String, String> deleteById(Long id){
-        userRepository.deleteById(id);
+    public HashMap<String, String> deleteByEmailAndPassword(String email, String password) throws NoSuchAlgorithmException {
+        password = Utils.hashPassword(password);
+        userRepository.deleteByEmailAndPassword(email, password);
         HashMap<String, String> message = new HashMap<>();
         message.put("message", "User has been deleted");
         return message;
@@ -51,4 +48,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public Optional<UserModel> findByEmailAndPassword(String email, String password) throws NoSuchAlgorithmException {
+        password = Utils.hashPassword(password);
+        return userRepository.findByEmailAndPassword(email, password);
+    }
 }
